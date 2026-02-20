@@ -11,28 +11,47 @@
  */
 
 export function createCalculator() {
-  let value = 0
-  const undoStack = []
+  let value = 0;
+  const undoStack = [];
 
   return {
     add(n) {
-      // TODO: 請實作
+      value += n;
+      undoStack.push({
+        operator: 'add',
+        value: n
+      });
     },
 
     subtract(n) {
-      // TODO: 請實作
-    },
-
-    getValue() {
-      return value
+      value -= n;
+      undoStack.push({
+        operator: 'subtract',
+        value: n
+      });
     },
 
     undo() {
-      // TODO: 請實作
+      if(this.getUndoCount() === 0) return;
+      let undoAction = undoStack.pop();
+      switch(undoAction.operator){
+        case 'add':
+          value -= undoAction.value;
+          break;
+        case 'subtract':
+          value += undoAction.value;
+          break;
+        default:
+          break;
+      }
+    },
+
+    getValue() {
+      return value;
     },
 
     getUndoCount() {
-      return undoStack.length
-    },
+      return undoStack.length;
+    }
   }
 }
